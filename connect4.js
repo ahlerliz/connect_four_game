@@ -99,19 +99,20 @@ function endGame(msg) {
 
 /** handleClick: handle click of column top to play piece */
 
-function handleClick(evt) {
+function handleClick(clickEvent) {
   // get x from ID of clicked cell
-  var x = +evt.target.id;
+  let x = +clickEvent.target.id;
 
   // get next spot in column (if none, ignore click)
-  var y = findSpotForCol(x);
-  if (y === null) {
+  let y = findSpotForCol(x);
+  if (y === undefined) {
     return;
   }
 
   // place piece in board and add to HTML table
   // TODO: add line to update in-memory board
   placeInTable(y, x);
+  board[y][x] = currPlayer;
 
   // check for win
   if (checkForWin()) {
@@ -119,10 +120,33 @@ function handleClick(evt) {
   }
 
   // check for tie
+  // let fullBoard = false;
+
+  // for (let row of Board) {
+  //   for (let cell of row) {
+  //     if (cell === undefined) {
+  //       fullBoard = false;
+  //       break;
+  //     }
+  //   }
+  //   fullBoard = true;
+  // }
+
+  let fullBoard = board.every(function(row) {
+    return row.every(function(cell) {
+      // console.log("cell:", cell !== undefined);
+      return cell !== undefined;
+    })
+  });
+
   // TODO: check if all cells in board are filled; if so call, call endGame
+  if (fullBoard === true) {
+    endGame();
+  }
 
   // switch players
   // TODO: switch currPlayer 1 <-> 2
+  currPlayer = (currPlayer === 1) ? (currPlayer = 2) : (currPlayer = 1);
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
