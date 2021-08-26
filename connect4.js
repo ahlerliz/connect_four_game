@@ -165,9 +165,6 @@ function checkForWin() {
    */
   function _win(cells) {
 
-    // TODO: Check four cells to see if they're all legal & all color of current
-    // player
-
     for (let cell of cells){
       let [y, x] = cell
       if ((y < 0 || y >= HEIGHT) || (x < 0 || x >= WIDTH)){
