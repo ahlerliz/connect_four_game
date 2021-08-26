@@ -76,7 +76,12 @@ function makeHtmlBoard() {
 
 function findSpotForCol(x) {
   // TODO: write the real version of this, rather than always returning 0
-  return 0;
+  for (let y = HEIGHT - 1; y >= 0; y-- ){
+    if (board[y][x] === undefined){
+      return y;
+    }
+  }
+  return undefined;
 }
 
 /** placeInTable: update DOM to place piece into HTML table of board */
@@ -94,7 +99,7 @@ function placeInTable(y, x) {
 /** endGame: announce game end */
 
 function endGame(msg) {
-  // TODO: pop up alert message
+  alert(msg);
 }
 
 /** handleClick: handle click of column top to play piece */
@@ -141,7 +146,7 @@ function handleClick(clickEvent) {
 
   // TODO: check if all cells in board are filled; if so call, call endGame
   if (fullBoard === true) {
-    endGame();
+    endGame("Tie Game!!! Play again :)");
   }
 
   // switch players
@@ -163,6 +168,20 @@ function checkForWin() {
     // TODO: Check four cells to see if they're all legal & all color of current
     // player
 
+    for (let cell of cells){
+      let [y, x] = cell
+      if ((y < 0 || y >= HEIGHT) || (x < 0 || x >= WIDTH)){
+        return false;
+      }
+      if (board[y][x] !== currPlayer){
+        return false;
+      }
+    }
+    return true;
+  // for each cell in cells, get element by class (convert y, x), 
+  // check if none are undefined & if IDs match
+
+
   }
 
   // using HEIGHT and WIDTH, generate "check list" of coordinates
@@ -176,9 +195,9 @@ function checkForWin() {
       // [ [y, x], [y, x], [y, x], [y, x] ]
 
       let horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
-      let vert;
-      let diagDL;
-      let diagDR;
+      let vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
+      let diagDL = [[y, x], [y - 1, x + 1], [y - 2, x + 2], [y - 3, x + 3]] ;
+      let diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]] ;
 
       // find winner (only checking each win-possibility as needed)
       if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
